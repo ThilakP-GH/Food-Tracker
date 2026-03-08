@@ -207,6 +207,35 @@ canvas{width:100%!important;}
 /* SETTINGS */
 .ssl{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
 
+/* GUIDE PAGE */
+.gtab{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:7px 14px;font-size:0.76rem;cursor:pointer;font-family:'Mulish',sans-serif;color:var(--muted);white-space:nowrap;font-weight:500;}
+.gtab.active{background:var(--dark);color:#86efac;border-color:var(--dark);}
+.gcard{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.gcard.open .gcbody{display:block;}
+.gchead{display:flex;justify-content:space-between;align-items:center;padding:13px 14px;cursor:pointer;gap:10px;}
+.gchl{display:flex;align-items:center;gap:12px;}
+.gcicon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.gcname{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;}
+.gcsub{font-size:0.68rem;color:var(--muted);margin-top:2px;}
+.gcarr{font-size:0.65rem;color:var(--muted);transition:transform 0.2s;flex-shrink:0;}
+.gcbody{display:none;padding:0 14px 14px;}
+.gcnote{font-size:0.8rem;color:#555;line-height:1.65;margin-bottom:10px;}
+.gclabel{font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.gcfoods{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.gctag{padding:4px 10px;border-radius:100px;font-size:0.74rem;font-weight:500;}
+.gctag.orange{background:#fff7ed;color:#c2410c;}
+.gctag.green{background:#f0fdf4;color:#15803d;}
+.gctag.yellow{background:#fefce8;color:#a16207;}
+.gctag.red{background:#fef2f2;color:#b91c1c;}
+.gctag.blue{background:#eff6ff;color:#1d4ed8;}
+.gctag.purple{background:#faf5ff;color:#7e22ce;}
+.gctip{background:var(--amber-light);border-radius:8px;padding:8px 11px;font-size:0.76rem;color:var(--amber);line-height:1.55;}
+/* TIP CARDS */
+.tip-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:14px;}
+.tip-num{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#e5ddd0;line-height:1;flex-shrink:0;width:32px;}
+.tip-title{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;margin-bottom:6px;color:var(--dark);}
+.tip-body{font-size:0.8rem;color:#555;line-height:1.65;}
+
 @media(max-width:380px){
   .fr{grid-template-columns:1fr 58px 58px;}
   .sum-stats,.bmig,.wsg{grid-template-columns:1fr 1fr;}
@@ -321,10 +350,10 @@ canvas{width:100%!important;}
     <button class="bprim" style="width:100%;" onclick="saveWeight()">💾 Save Weight</button>
   </div>
   <div class="card">
-    <div class="clabel">BMI — Height 171 cm</div>
+    <div class="clabel">BMI — Height <span id="bmi-height-lbl">171</span> cm</div>
     <div class="bmig">
       <div class="bmic"><div class="bmiv" id="bmi-v">31.8</div><div class="bmil">Current BMI</div><div class="bmis" id="bmi-s" style="color:var(--red);">Obese I</div></div>
-      <div class="bmic"><div class="bmiv gv">75 kg</div><div class="bmil">Target</div><div class="bmis" style="color:var(--green);">BMI 25.6</div></div>
+      <div class="bmic"><div class="bmiv gv" id="bmi-target-lbl">75 kg</div><div class="bmil">Target</div><div class="bmis" style="color:var(--green);" id="bmi-target-bmi">BMI 25.6</div></div>
       <div class="bmic"><div class="bmiv av" id="bmi-lose">18 kg</div><div class="bmil">To Lose</div><div class="bmis av" id="bmi-mo">~9 months</div></div>
     </div>
     <div style="background:var(--bg);border-radius:10px;padding:9px 11px;font-size:0.75rem;color:var(--muted);line-height:1.7;">
@@ -443,7 +472,64 @@ function doGet(e) {
     </div>
   </div>
 
-  <!-- DATA INFO -->
+  <!-- PROFILE SETTINGS -->
+  <div class="card">
+    <div class="clabel">👤 My Profile — Edit anytime</div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:14px;line-height:1.6;">Update your details here if anything changes. All BMI and calorie calculations will update automatically.</p>
+    <div style="display:grid;gap:10px;">
+      <div class="aiw">
+        <label>Height</label>
+        <div style="display:flex;align-items:baseline;gap:6px;">
+          <input type="number" id="p-height" placeholder="171" min="100" max="250" inputmode="numeric" style="font-family:Syne,sans-serif;font-size:1.5rem;font-weight:800;border:none;background:none;outline:none;color:var(--dark);width:80px;">
+          <span style="font-size:0.9rem;color:var(--muted);">cm</span>
+        </div>
+      </div>
+      <div class="aiw">
+        <label>Starting weight (when you began)</label>
+        <div style="display:flex;align-items:baseline;gap:6px;">
+          <input type="number" id="p-startkg" placeholder="93" step="0.1" min="30" max="250" inputmode="decimal" style="font-family:Syne,sans-serif;font-size:1.5rem;font-weight:800;border:none;background:none;outline:none;color:var(--dark);width:90px;">
+          <span style="font-size:0.9rem;color:var(--muted);">kg</span>
+        </div>
+      </div>
+      <div class="aiw">
+        <label>Target weight (goal)</label>
+        <div style="display:flex;align-items:baseline;gap:6px;">
+          <input type="number" id="p-targetkg" placeholder="75" step="0.1" min="30" max="250" inputmode="decimal" style="font-family:Syne,sans-serif;font-size:1.5rem;font-weight:800;border:none;background:none;outline:none;color:var(--dark);width:90px;">
+          <span style="font-size:0.9rem;color:var(--muted);">kg</span>
+        </div>
+      </div>
+      <div class="aiw">
+        <label>Daily calorie target</label>
+        <div style="display:flex;align-items:baseline;gap:6px;">
+          <input type="number" id="p-caltarget" placeholder="2050" min="1000" max="4000" inputmode="numeric" style="font-family:Syne,sans-serif;font-size:1.5rem;font-weight:800;border:none;background:none;outline:none;color:var(--dark);width:100px;">
+          <span style="font-size:0.9rem;color:var(--muted);">kcal/day</span>
+        </div>
+      </div>
+    </div>
+    <button class="bprim" style="width:100%;margin-top:14px;" onclick="saveProfileSettings()">💾 Save Profile</button>
+  </div>
+
+  <!-- ABOUT / FOUNDER -->
+  <div class="card" style="background:var(--dark);border-color:#3c3836;">
+    <div class="clabel" style="color:#a8a29e;">👤 About the Founder</div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <img src="data:image/jpeg;base64,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"
+           style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #86efac;flex-shrink:0;"
+           alt="Thilak Pollampally">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:#fafaf9;">Thilak Pollampally</div>
+        <div style="margin-top:10px;">
+          <a href="mailto:thilakpollampally@gmail.com"
+             style="display:inline-flex;align-items:center;gap:7px;background:#2c2825;border:1px solid #3c3836;border-radius:8px;padding:8px 12px;text-decoration:none;">
+            <span style="font-size:0.9rem;">✉️</span>
+            <span style="font-size:0.78rem;color:#d6d3d1;">thilakpollampally@gmail.com</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- DATA INFO -->
   <div class="card">
     <div class="clabel">📋 Your Data Summary</div>
     <div id="data-summary" style="font-size:0.84rem;color:#555;line-height:1.9;"></div>
@@ -457,11 +543,445 @@ function doGet(e) {
   </div>
 </div>
 
+<!-- GUIDE PAGE -->
+<div class="page" id="page-guide">
+  <div class="ph"><div><h1>📚 Nutrition Guide</h1><p>Vitamins · Probiotics · Weight Loss Tips</p></div></div>
+
+  <!-- TAB SWITCHER -->
+  <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;">
+    <button class="gtab active" onclick="switchTab('vitamins',this)">💊 Vitamins</button>
+    <button class="gtab" onclick="switchTab('probiotics',this)">🦠 Probiotics</button>
+    <button class="gtab" onclick="switchTab('tips',this)">💡 Weight Loss Tips</button>
+  </div>
+
+  <!-- VITAMINS TAB -->
+  <div id="gtab-vitamins">
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl">
+          <span class="gcicon" style="background:#fef9c3;">☀️</span>
+          <div><div class="gcname">Vitamin A</div><div class="gcsub">Eyes · Skin · Immunity</div></div>
+        </div>
+        <span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Essential for vision (especially night vision), skin health, and immune function. Deficiency causes dry eyes and skin.</div>
+        <div class="gclabel">🥗 Best Indian Food Sources</div>
+        <div class="gcfoods">
+          <span class="gctag orange">Sweet potato</span><span class="gctag orange">Carrot</span><span class="gctag orange">Pumpkin</span>
+          <span class="gctag green">Spinach (palak)</span><span class="gctag green">Drumstick leaves (moringa)</span><span class="gctag green">Amaranth (rajgira)</span>
+          <span class="gctag yellow">Mango</span><span class="gctag yellow">Papaya</span><span class="gctag red">Egg yolk</span>
+          <span class="gctag red">Whole milk</span><span class="gctag red">Ghee (small amount)</span>
+        </div>
+        <div class="gctip">💡 Eat with a little fat (ghee/oil) — Vitamin A is fat-soluble and absorbs better that way.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl">
+          <span class="gcicon" style="background:#fce7f3;">🩸</span>
+          <div><div class="gcname">Vitamin B12</div><div class="gcsub">Energy · Brain · Red blood cells</div></div>
+        </div>
+        <span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Critical for nerve function and energy. Vegetarians are at high risk of deficiency — consider a supplement if you eat no meat/eggs.</div>
+        <div class="gclabel">🥗 Best Indian Food Sources</div>
+        <div class="gcfoods">
+          <span class="gctag red">Eggs</span><span class="gctag red">Chicken</span><span class="gctag red">Fish (rohu, sardines, mackerel)</span>
+          <span class="gctag blue">Curd / Dahi</span><span class="gctag blue">Paneer</span><span class="gctag blue">Milk</span>
+          <span class="gctag purple">Fortified idli/dosa batter (some brands)</span>
+        </div>
+        <div class="gctip">💡 Best absorbed from animal sources. If vegetarian, eat curd + paneer daily and consider a B12 supplement.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl">
+          <span class="gcicon" style="background:#dcfce7;">🦴</span>
+          <div><div class="gcname">Vitamin D</div><div class="gcsub">Bones · Calcium absorption · Mood</div></div>
+        </div>
+        <span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Most Indians are deficient despite living in a sunny country — because we avoid direct sun. It controls calcium absorption and affects mood and immunity.</div>
+        <div class="gclabel">🥗 Best Indian Food Sources</div>
+        <div class="gcfoods">
+          <span class="gctag red">Egg yolk</span><span class="gctag red">Fatty fish (mackerel, sardines, salmon)</span>
+          <span class="gctag blue">Fortified milk</span><span class="gctag blue">Fortified curd</span>
+          <span class="gctag yellow">Mushrooms (sun-exposed)</span>
+        </div>
+        <div class="gcnote" style="margin-top:8px;">☀️ <strong>Best source: Sunlight.</strong> 15–20 mins of direct sun on arms/legs before 9am or after 4pm, 3–4 times a week is ideal.</div>
+        <div class="gctip">💡 Vitamin D + Calcium work together. Always pair with calcium-rich foods for best effect.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl">
+          <span class="gcicon" style="background:#fff7ed;">🍊</span>
+          <div><div class="gcname">Vitamin C</div><div class="gcsub">Immunity · Skin · Iron absorption</div></div>
+        </div>
+        <span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Powerful antioxidant. Boosts immunity, helps iron absorb better, and keeps skin collagen intact. Cannot be stored — eat daily.</div>
+        <div class="gclabel">🥗 Best Indian Food Sources</div>
+        <div class="gcfoods">
+          <span class="gctag orange">Amla (Indian gooseberry) — highest source</span>
+          <span class="gctag orange">Guava</span><span class="gctag orange">Orange</span><span class="gctag orange">Lemon / Nimbu</span>
+          <span class="gctag green">Capsicum (especially red/yellow)</span><span class="gctag green">Coriander leaves</span>
+          <span class="gctag green">Curry leaves</span><span class="gctag green">Tomato</span>
+          <span class="gctag yellow">Papaya</span><span class="gctag yellow">Pineapple</span>
+        </div>
+        <div class="gctip">💡 Add lemon juice to dal or rice — it also helps absorb the iron from lentils better.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl">
+          <span class="gcicon" style="background:#eff6ff;">🧠</span>
+          <div><div class="gcname">Vitamin B Complex (B1, B2, B3, B6, B9)</div><div class="gcsub">Energy · Nerves · Brain · Metabolism</div></div>
+        </div>
+        <span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">B vitamins convert food into energy. B9 (folate) is critical for cell repair. B6 supports brain health. Refined rice/maida strips these away — whole grains retain them.</div>
+        <div class="gclabel">🥗 Best Indian Food Sources</div>
+        <div class="gcfoods">
+          <span class="gctag purple">Brown rice / Hand-pounded rice</span><span class="gctag purple">Millets (ragi, jowar, bajra)</span>
+          <span class="gctag green">Spinach</span><span class="gctag green">Methi (fenugreek leaves)</span><span class="gctag green">Drumstick leaves</span>
+          <span class="gctag red">Eggs</span><span class="gctag red">Chicken liver</span>
+          <span class="gctag yellow">Dal (all types — toor, moong, masoor)</span><span class="gctag yellow">Chana</span>
+          <span class="gctag orange">Peanuts</span><span class="gctag orange">Sunflower seeds</span>
+        </div>
+        <div class="gctip">💡 Switching even one meal from white rice to millets gives you a significant B vitamin boost.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl">
+          <span class="gcicon" style="background:#fdf4ff;">🩸</span>
+          <div><div class="gcname">Iron</div><div class="gcsub">Haemoglobin · Energy · Fatigue prevention</div></div>
+        </div>
+        <span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Iron deficiency (anaemia) is extremely common in India, causing fatigue, breathlessness, and poor concentration. Vegetarian iron (non-heme) needs Vitamin C to absorb well.</div>
+        <div class="gclabel">🥗 Best Indian Food Sources</div>
+        <div class="gcfoods">
+          <span class="gctag red">Chicken liver</span><span class="gctag red">Eggs</span><span class="gctag red">Fish</span>
+          <span class="gctag green">Spinach</span><span class="gctag green">Methi</span><span class="gctag green">Drumstick leaves (moringa)</span>
+          <span class="gctag yellow">Toor dal</span><span class="gctag yellow">Masoor dal</span><span class="gctag yellow">Rajma</span><span class="gctag yellow">Horse gram (kulthi)</span>
+          <span class="gctag orange">Jaggery (paaghu/bella)</span><span class="gctag orange">Sesame seeds (til)</span><span class="gctag orange">Ragi</span>
+        </div>
+        <div class="gctip">💡 Always squeeze lemon on dal or eat Vitamin C food in the same meal to double iron absorption.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl">
+          <span class="gcicon" style="background:#f0fdf4;">🦴</span>
+          <div><div class="gcname">Calcium</div><div class="gcsub">Bones · Teeth · Muscle function</div></div>
+        </div>
+        <span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Essential for strong bones and teeth. Also needed for muscle contractions and nerve signals. Needs Vitamin D to absorb properly.</div>
+        <div class="gclabel">🥗 Best Indian Food Sources</div>
+        <div class="gcfoods">
+          <span class="gctag blue">Milk (200ml = ~240mg)</span><span class="gctag blue">Curd / Dahi</span><span class="gctag blue">Paneer</span><span class="gctag blue">Buttermilk</span>
+          <span class="gctag green">Ragi (finger millet) — best plant source</span><span class="gctag green">Drumstick leaves</span><span class="gctag green">Amaranth</span>
+          <span class="gctag orange">Sesame seeds (til)</span><span class="gctag orange">Almonds</span>
+          <span class="gctag yellow">Rajma</span><span class="gctag yellow">Chana dal</span>
+        </div>
+        <div class="gctip">💡 Ragi mudde or ragi roti is one of the best calcium sources in Indian cuisine — better than most vegetables.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl">
+          <span class="gcicon" style="background:#fef2f2;">💪</span>
+          <div><div class="gcname">Magnesium</div><div class="gcsub">Muscle recovery · Sleep · Energy</div></div>
+        </div>
+        <span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Important for gym-goers — helps muscles relax and recover after workouts. Also improves sleep quality and reduces cramps.</div>
+        <div class="gclabel">🥗 Best Indian Food Sources</div>
+        <div class="gcfoods">
+          <span class="gctag green">Spinach</span><span class="gctag green">Banana</span>
+          <span class="gctag yellow">Pumpkin seeds</span><span class="gctag yellow">Sunflower seeds</span>
+          <span class="gctag orange">Almonds</span><span class="gctag orange">Cashews</span><span class="gctag orange">Peanuts</span>
+          <span class="gctag purple">Dark chocolate (70%+, small piece)</span>
+          <span class="gctag blue">Moong dal</span><span class="gctag blue">Toor dal</span>
+          <span class="gctag red">Whole wheat / Multigrain roti</span>
+        </div>
+        <div class="gctip">💡 Gym workout depletes magnesium. A banana post-workout helps replenish it along with potassium.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl">
+          <span class="gcicon" style="background:#fff7ed;">🧬</span>
+          <div><div class="gcname">Zinc</div><div class="gcsub">Immunity · Wound healing · Testosterone</div></div>
+        </div>
+        <span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Zinc supports immune function, wound healing, and testosterone production — especially important for men who exercise. Deficiency causes hair loss and slow recovery.</div>
+        <div class="gclabel">🥗 Best Indian Food Sources</div>
+        <div class="gcfoods">
+          <span class="gctag red">Eggs</span><span class="gctag red">Chicken</span><span class="gctag red">Fish</span>
+          <span class="gctag orange">Pumpkin seeds</span><span class="gctag orange">Cashews</span><span class="gctag orange">Almonds</span>
+          <span class="gctag yellow">Chana (chickpea)</span><span class="gctag yellow">Rajma</span><span class="gctag yellow">Moong dal</span>
+          <span class="gctag purple">Sesame seeds</span><span class="gctag purple">Whole wheat</span>
+        </div>
+        <div class="gctip">💡 Soaking and sprouting dals before cooking increases zinc bioavailability significantly.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl">
+          <span class="gcicon" style="background:#ecfdf5;">🫀</span>
+          <div><div class="gcname">Omega-3 Fatty Acids</div><div class="gcsub">Heart · Brain · Inflammation</div></div>
+        </div>
+        <span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Reduces inflammation, supports brain function and heart health. Most Indians are deficient due to low fish consumption. Reduces fat storage tendency.</div>
+        <div class="gclabel">🥗 Best Indian Food Sources</div>
+        <div class="gcfoods">
+          <span class="gctag red">Mackerel (bangda)</span><span class="gctag red">Sardines</span><span class="gctag red">Rohu fish</span><span class="gctag red">Hilsa</span>
+          <span class="gctag orange">Walnuts</span><span class="gctag orange">Flaxseeds (alsi)</span><span class="gctag orange">Chia seeds</span>
+          <span class="gctag green">Mustard oil</span><span class="gctag green">Methi seeds</span>
+        </div>
+        <div class="gctip">💡 Grind flaxseeds and add to your multigrain drink — invisible but very effective source of Omega-3.</div>
+      </div>
+    </div>
+
+  </div><!-- end vitamins tab -->
+
+  <!-- PROBIOTICS TAB -->
+  <div id="gtab-probiotics" style="display:none;">
+
+    <div class="card" style="background:var(--dark);border-color:#3c3836;margin-bottom:12px;">
+      <div style="font-size:0.84rem;color:#d6d3d1;line-height:1.7;">
+        🦠 <strong style="color:#86efac;">Probiotics</strong> are live beneficial bacteria that live in your gut. A healthy gut microbiome improves digestion, immunity, mood, and even helps with <strong style="color:#86efac;">weight loss</strong> by reducing inflammation and improving nutrient absorption. Include at least one probiotic food every day.
+      </div>
+    </div>
+
+    <div class="gcard open">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl"><span class="gcicon" style="background:#f0fdf4;">🥛</span>
+          <div><div class="gcname">Curd / Dahi</div><div class="gcsub">Most accessible Indian probiotic</div></div>
+        </div><span class="gcarr" style="transform:rotate(180deg);">▼</span>
+      </div>
+      <div class="gcbody" style="display:block;">
+        <div class="gcnote">Homemade curd is one of the best probiotics available in India. Contains Lactobacillus bacteria that line the gut and aid digestion. Always prefer homemade over store-bought sweet curd.</div>
+        <div class="gcfoods"><span class="gctag blue">60–100g with lunch</span><span class="gctag blue">Homemade preferred</span><span class="gctag green">Full-fat or low-fat both fine</span></div>
+        <div class="gctip">💡 Eat at room temperature, not ice-cold. Cold curd kills some of the live bacteria.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl"><span class="gcicon" style="background:#eff6ff;">🥤</span>
+          <div><div class="gcname">Buttermilk / Chaas / Majjige</div><div class="gcsub">Cooling + gut-friendly</div></div>
+        </div><span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Diluted curd with water and spices (jeera, curry leaves, ginger). Extremely good for digestion and only ~40 kcal per glass. Perfect post-lunch drink especially in summer.</div>
+        <div class="gcfoods"><span class="gctag blue">1 glass after lunch</span><span class="gctag green">Add jeera + curry leaves</span><span class="gctag orange">No added sugar</span></div>
+        <div class="gctip">💡 Better than regular water post-meal — settles digestion and provides gut bacteria.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl"><span class="gcicon" style="background:#fef9c3;">🫙</span>
+          <div><div class="gcname">Idli / Dosa Batter (fermented)</div><div class="gcsub">Natural fermentation probiotic</div></div>
+        </div><span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Properly fermented idli-dosa batter (12–16 hours fermentation) is rich in beneficial bacteria. The fermentation also increases B vitamins and reduces phytic acid, improving mineral absorption.</div>
+        <div class="gcfoods"><span class="gctag yellow">Idli (steamed — best)</span><span class="gctag yellow">Dosa</span><span class="gctag green">12–16 hr fermentation ideal</span></div>
+        <div class="gctip">💡 Steamed idli retains more probiotics than pan-fried dosa. Have idli over dosa when possible.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl"><span class="gcicon" style="background:#fdf4ff;">🫚</span>
+          <div><div class="gcname">Kanji (fermented rice water)</div><div class="gcsub">Traditional South Indian gut tonic</div></div>
+        </div><span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Left-over cooked rice soaked overnight in water and eaten next morning is a traditional South Indian probiotic. Called "Pazhaya Sadam" in Tamil or "Pazham kanji" — this fermented rice is extremely gut-friendly.</div>
+        <div class="gcfoods"><span class="gctag purple">Overnight soaked rice</span><span class="gctag green">Add a little curd or buttermilk</span><span class="gctag orange">Morning meal option</span></div>
+        <div class="gctip">💡 A grandma's secret — this is being rediscovered by nutritionists as one of the best gut foods.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl"><span class="gcicon" style="background:#fff7ed;">🥬</span>
+          <div><div class="gcname">Pickles (Homemade / Naturally fermented)</div><div class="gcsub">Fermented vegetables</div></div>
+        </div><span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Traditionally made Indian pickles (avakaya, maavadu, lime pickle) that are naturally fermented — not the vinegar-preserved commercial ones — contain beneficial bacteria. Small amounts with meals.</div>
+        <div class="gcfoods"><span class="gctag orange">Homemade mango pickle</span><span class="gctag orange">Lime pickle</span><span class="gctag green">1 tsp with meal</span><span class="gctag red">Avoid commercial (vinegar-based)</span></div>
+        <div class="gctip">💡 Only naturally fermented (oil + salt method) pickles have probiotic value. Vinegar pickles do not.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl"><span class="gcicon" style="background:#f0fdf4;">🌾</span>
+          <div><div class="gcname">Ambali / Koozh (fermented millet porridge)</div><div class="gcsub">Traditional gut + energy food</div></div>
+        </div><span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Fermented ragi or kambu (bajra) porridge. Traditional breakfast in Tamil Nadu and Karnataka. The overnight fermentation multiplies beneficial bacteria and pre-digests the millet, making it very easy on the gut.</div>
+        <div class="gcfoods"><span class="gctag purple">Ragi koozh</span><span class="gctag purple">Kambu koozh</span><span class="gctag green">Add small onion + green chilli</span></div>
+        <div class="gctip">💡 One of the most nutritious traditional breakfasts — provides calcium (ragi), probiotics, and slow-release energy.</div>
+      </div>
+    </div>
+
+    <div class="gcard">
+      <div class="gchead" onclick="toggleG(this)">
+        <div class="gchl"><span class="gcicon" style="background:#eff6ff;">🫘</span>
+          <div><div class="gcname">Sprouted Legumes</div><div class="gcsub">Prebiotic — feeds your gut bacteria</div></div>
+        </div><span class="gcarr">▼</span>
+      </div>
+      <div class="gcbody">
+        <div class="gcnote">Sprouted moong, chana, and methi seeds are prebiotic — they feed the existing good bacteria in your gut rather than adding new ones. Think of prebiotics as food for probiotics.</div>
+        <div class="gcfoods"><span class="gctag yellow">Sprouted moong</span><span class="gctag yellow">Sprouted chana</span><span class="gctag green">Sprouted methi seeds (small amount)</span><span class="gctag orange">Banana</span><span class="gctag orange">Onion</span><span class="gctag orange">Garlic</span></div>
+        <div class="gctip">💡 Eat sprouted moong as a salad with lemon and chilli — raw or lightly steamed for maximum prebiotic benefit.</div>
+      </div>
+    </div>
+
+  </div><!-- end probiotics tab -->
+
+  <!-- WEIGHT LOSS TIPS TAB -->
+  <div id="gtab-tips" style="display:none;">
+
+    <div class="tip-card">
+      <div class="tip-num">01</div>
+      <div class="tip-content">
+        <div class="tip-title">Eat 5 times a day — not 3</div>
+        <div class="tip-body">Research supports eating <strong>5 smaller meals</strong> spaced every 3–4 hours rather than 3 large meals. This keeps blood sugar stable, reduces hunger spikes, and prevents overeating. Ideal schedule: 7am · 10:30am · 1pm · 4pm · 7:30pm. Your current meal plan already follows this — stick to it.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">02</div>
+      <div class="tip-content">
+        <div class="tip-title">Eat slowly — take 20 minutes per meal</div>
+        <div class="tip-body">Your brain takes 20 minutes to register that your stomach is full. Eating fast leads to overeating before the signal arrives. Put down your spoon between bites, chew each mouthful 15–20 times. People who eat slowly naturally consume 10–15% fewer calories.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">03</div>
+      <div class="tip-content">
+        <div class="tip-title">Eat protein first at every meal</div>
+        <div class="tip-body">Starting with dal, egg, curd, or chicken before touching the rice slows glucose absorption, keeps you full longer, and preserves muscle during fat loss. Aim for protein in every single meal. When you eat rice first, blood sugar spikes fast — then crashes — making you hungry again sooner.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">04</div>
+      <div class="tip-content">
+        <div class="tip-title">Drink 500ml water before meals</div>
+        <div class="tip-body">Drinking 2 glasses of water 20–30 minutes before a meal reduces the amount you eat by an average of 13%. The water takes up stomach space and dulls hunger signals. Studies show this alone can create a 44% greater weight loss over 12 weeks compared to not doing it.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">05</div>
+      <div class="tip-content">
+        <div class="tip-title">Stop eating 2–3 hours before bed</div>
+        <div class="tip-body">Your metabolism slows significantly at night. Food eaten after 9pm is more likely to be stored as fat because insulin sensitivity drops in the evening. Your dinner at 7:30pm is ideal — avoid eating after that except for plain water or herbal tea.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">06</div>
+      <div class="tip-content">
+        <div class="tip-title">Use smaller plates — the visual trick that works</div>
+        <div class="tip-body">Serving food on a smaller plate (25cm instead of 30cm) reduces portions by 20–30% without feeling deprived — because your brain judges fullness by how full the plate looks, not by absolute quantity. This is one of the most consistently proven behavioural tricks in nutrition research.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">07</div>
+      <div class="tip-content">
+        <div class="tip-title">Eat vegetables and salad first</div>
+        <div class="tip-body">Eat raw salad or cooked vegetables at the start of your meal before rice. Fibre from vegetables slows down carbohydrate digestion, flattens the blood sugar spike from rice, and fills up stomach volume with very few calories. Even a small kachumber salad (cucumber + tomato + onion + lemon) before rice makes a difference.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">08</div>
+      <div class="tip-content">
+        <div class="tip-title">Sleep 7–8 hours — it's not optional for fat loss</div>
+        <div class="tip-body">Sleep deprivation increases ghrelin (hunger hormone) by 24% and decreases leptin (fullness hormone). This makes you crave high-calorie foods the next day and makes your body hold onto fat more stubbornly. Studies show people who sleep less than 6 hours lose 55% less fat even on the same diet.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">09</div>
+      <div class="tip-content">
+        <div class="tip-title">Never skip post-gym nutrition</div>
+        <div class="tip-body">Within 45 minutes after your workout, your muscles are primed to absorb protein and carbohydrates for recovery. Skipping this window leads to muscle breakdown instead of muscle building. Your current post-gym meal (multigrain drink + banana + almonds) is well-timed — keep it consistent.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">10</div>
+      <div class="tip-content">
+        <div class="tip-title">Reduce liquid calories — they don't fill you up</div>
+        <div class="tip-body">Tea with jaggery, juice, flavoured buttermilk, and lassi all carry calories but don't satisfy hunger like solid food does. Two cups of sweetened tea per day = ~120 kcal hidden. Replace one with black coffee or plain tea to quietly save 60 kcal per day = 1.8 kg saved per year.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">11</div>
+      <div class="tip-content">
+        <div class="tip-title">Track everything — even small bites count</div>
+        <div class="tip-body">Studies consistently show people who track food lose twice as much weight as those who don't — even if both groups eat the same food. "Taste testing" while cooking, the last few bites of someone else's plate, and untracked snacks add up to 200–400 hidden calories per day. Log everything in this app — no exceptions.</div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">12</div>
+      <div class="tip-content">
+        <div class="tip-title">Walk after meals — even 10 minutes helps</div>
+        <div class="tip-body">A brisk 10-minute walk within 30 minutes of a meal reduces the post-meal blood sugar spike by up to 30%. This means less fat storage from that meal. Even walking slowly around the house counts. Three 10-minute walks a day (after each main meal) adds up to 30+ extra minutes of calorie burning.</div>
+      </div>
+    </div>
+
+  </div><!-- end tips tab -->
+
+</div><!-- end guide page -->
+
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <button class="nav-btn active" onclick="showPage('today',this)"><span class="ni">🥗</span>Today</button>
   <button class="nav-btn" onclick="showPage('weight',this)"><span class="ni">⚖️</span>Weight</button>
   <button class="nav-btn" onclick="showPage('weekly',this)"><span class="ni">📊</span>Weekly</button>
+  <button class="nav-btn" onclick="showPage('guide',this)"><span class="ni">📚</span>Guide</button>
   <button class="nav-btn" onclick="showPage('settings',this)"><span class="ni">⚙️</span>Settings</button>
 </div>
 
@@ -498,6 +1018,28 @@ function doGet(e) {
   </div>
 </div>
 
+<!-- EDIT WEIGHT MODAL -->
+<div class="mo" id="edit-w-modal" onclick="if(event.target===this)closeEditW()">
+  <div class="modal">
+    <span class="mml">Edit Weight Entry</span>
+    <h3>Correct this entry</h3>
+    <input type="hidden" id="edit-w-date">
+    <div style="margin:14px 0;">
+      <div class="ssl" style="margin-bottom:6px;">Date</div>
+      <div id="edit-w-date-lbl" style="font-weight:600;font-size:0.9rem;margin-bottom:14px;"></div>
+      <div class="ssl" style="margin-bottom:6px;">Correct weight (kg)</div>
+      <div style="display:flex;align-items:baseline;gap:6px;">
+        <input type="number" id="edit-w-val" step="0.1" min="30" max="250" inputmode="decimal" style="font-family:Syne,sans-serif;font-size:2.2rem;font-weight:800;border:none;border-bottom:2px solid var(--border);background:none;outline:none;color:var(--dark);width:120px;padding-bottom:4px;">
+        <span style="font-size:1rem;color:var(--muted);">kg</span>
+      </div>
+    </div>
+    <div class="mact">
+      <button class="bcanc" onclick="closeEditW()">Cancel</button>
+      <button class="bprim" onclick="saveEditW()">Update Weight</button>
+    </div>
+  </div>
+</div>
+
 <!-- INSTALL BANNER -->
 <div class="ib" id="ib">
   <div><strong>📲 Install Health Tracker</strong><p>Add to home screen — one tap access, works offline!</p></div>
@@ -508,7 +1050,11 @@ function doGet(e) {
 </div>
 
 <script>
-const TARGET=2050, H_CM=171;
+let profile={height:171,targetKg:75,calTarget:2050,startKg:93};
+function loadProfile(){try{const p=localStorage.getItem("ht-profile");if(p)profile=Object.assign(profile,JSON.parse(p));}catch(e){}}
+function saveProfile(){localStorage.setItem("ht-profile",JSON.stringify(profile));}
+function TARGET(){return profile.calTarget;}
+function H_CM(){return profile.height;}
 const MEALS=[
   {id:'breakfast',name:'Breakfast',icon:'🌅',time:'Post-gym · 07:00–08:00'},
   {id:'midmorning',name:'Mid-Morning',icon:'🍊',time:'Fruits / snack · 10:30–11:00'},
@@ -580,8 +1126,8 @@ function renderToday(){
   const day=getDay(curDate);
   const{k,c,p,f}=getTotals(curDate);
   const burn=day.burn||0, steps=day.steps||0, water=day.water||0;
-  const net=k-burn, remaining=TARGET-net, pct=Math.min((net/TARGET)*100,100);
-  const over=net>TARGET;
+  const net=k-burn, remaining=TARGET()-net, pct=Math.min((net/TARGET())*100,100);
+  const over=net>TARGET();
 
   const ring=document.getElementById('ring-c');
   ring.style.strokeDashoffset=233-(pct/100)*233;
@@ -682,9 +1228,13 @@ function saveWeight(){
 function delWeight(date){weightLog=weightLog.filter(w=>w.d!==date);save();renderWeight();}
 function renderWeight(){
   const latest=weightLog.length>0?weightLog[weightLog.length-1].kg:93;
-  const bmi=(latest/(H_CM/100)**2).toFixed(1), toLose=Math.max(0,latest-75).toFixed(1), months=Math.ceil(toLose/2);
+  const bmi=(latest/(H_CM()/100)**2).toFixed(1), toLose=Math.max(0,latest-profile.targetKg).toFixed(1), months=Math.ceil(toLose/2);
   document.getElementById('bmi-v').textContent=bmi;
   document.getElementById('bmi-lose').textContent=toLose+' kg';
+  document.getElementById('bmi-height-lbl').textContent=profile.height;
+  const tBmi=(profile.targetKg/(profile.height/100)**2).toFixed(1);
+  document.getElementById('bmi-target-lbl').textContent=profile.targetKg+' kg';
+  document.getElementById('bmi-target-bmi').textContent='BMI '+tBmi;
   document.getElementById('bmi-mo').textContent='~'+months+' months';
   const bs=document.getElementById('bmi-s');
   if(bmi<18.5){bs.textContent='Underweight';bs.style.color='var(--blue)';}
@@ -694,7 +1244,7 @@ function renderWeight(){
   const list=document.getElementById('wlog-list');
   if(weightLog.length===0){list.innerHTML='<div style="text-align:center;padding:16px;font-size:0.8rem;color:var(--muted);">No entries yet. Log your weight above!</div>';drawChart();return;}
   const sorted=[...weightLog].reverse();
-  list.innerHTML=sorted.map((w,i)=>{const prev=sorted[i+1];const diff=prev?((w.kg-prev.kg).toFixed(1)):'—';const dc=diff!=='—'?(diff<0?'var(--green)':diff>0?'var(--red)':'var(--muted)'):'var(--muted)';return`<div class="wli"><span class="wld">${fmtDate(w.d)}</span><span class="wlk">${w.kg} kg</span><span style="font-size:0.76rem;color:${dc};">${diff!=='—'?(diff>0?'+':'')+diff+' kg':''}</span><button class="wldel" onclick="delWeight('${w.d}')">✕</button></div>`;}).join('');
+  list.innerHTML=sorted.map((w,i)=>{const prev=sorted[i+1];const diff=prev?((w.kg-prev.kg).toFixed(1)):'—';const dc=diff!=='—'?(diff<0?'var(--green)':diff>0?'var(--red)':'var(--muted)'):'var(--muted)';return`<div class="wli"><span class="wld">${fmtDate(w.d)}</span><span class="wlk">${w.kg} kg</span><span style="font-size:0.76rem;color:${dc};">${diff!=='—'?(diff>0?'+':'')+diff+' kg':''}</span><div style="display:flex;gap:4px;"><button style="background:var(--blue-light);border:none;color:var(--blue);cursor:pointer;font-size:0.75rem;padding:3px 7px;border-radius:5px;" onclick="openEditW('${w.d}',${w.kg})">✏️</button><button class="wldel" onclick="delWeight('${w.d}')">✕</button></div></div>`;}).join('');
   drawChart();
 }
 function drawChart(){
@@ -733,13 +1283,13 @@ function renderWeekly(){
   document.getElementById('w-steps').textContent=logged.length>0?Math.round(logged.reduce((s,d)=>s+d.steps,0)/logged.length).toLocaleString():'—';
   document.getElementById('w-water').textContent=(logged.length>0?(logged.reduce((s,d)=>s+d.water,0)/logged.length).toFixed(1):'—')+' glasses/day';
   if(weightLog.length>=2){const wr=weightLog.filter(w=>w.d>=days[0].date);if(wr.length>=2){const diff=(wr[wr.length-1].kg-wr[0].kg).toFixed(1);const el=document.getElementById('w-wt');el.textContent=(diff>0?'+':'')+diff+' kg';el.className='wsv '+(diff<0?'gv':diff>0?'rv':'');}else document.getElementById('w-wt').textContent='—';}
-  const maxK=Math.max(...days.map(d=>d.k),TARGET);
+  const maxK=Math.max(...days.map(d=>d.k),TARGET());
   const dns=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  document.getElementById('day-bars').innerHTML=days.map(d=>{const nd=new Date(d.date+'T00:00:00');const pct=Math.min((d.k/maxK)*100,100);const col=d.k===0?'#e5ddd0':d.k<=TARGET?'#2d6a4f':'#9b2226';return`<div class="dbr"><span class="dbl">${dns[nd.getDay()]}</span><div class="dbb"><div class="dbf" style="width:${pct}%;background:${col};"></div></div><span class="dbc">${d.k?d.k+' cal':'—'}</span></div>`;}).join('');
-  if(logged.length>0){const best=logged.reduce((b,d)=>{const nb=TARGET-(b.k-b.burn),nd2=TARGET-(d.k-d.burn);return nd2>0&&nd2<nb?d:b;});document.getElementById('best-day').innerHTML=`<strong>${fmtDate(best.date)}</strong> — ${best.k} kcal eaten, ${best.burn} burned, ${best.steps.toLocaleString()} steps`;}
+  document.getElementById('day-bars').innerHTML=days.map(d=>{const nd=new Date(d.date+'T00:00:00');const pct=Math.min((d.k/maxK)*100,100);const col=d.k===0?'#e5ddd0':d.k<=TARGET()?'#2d6a4f':'#9b2226';return`<div class="dbr"><span class="dbl">${dns[nd.getDay()]}</span><div class="dbb"><div class="dbf" style="width:${pct}%;background:${col};"></div></div><span class="dbc">${d.k?d.k+' cal':'—'}</span></div>`;}).join('');
+  if(logged.length>0){const best=logged.reduce((b,d)=>{const nb=TARGET()-(b.k-b.burn),nd2=TARGET()-(d.k-d.burn);return nd2>0&&nd2<nb?d:b;});document.getElementById('best-day').innerHTML=`<strong>${fmtDate(best.date)}</strong> — ${best.k} kcal eaten, ${best.burn} burned, ${best.steps.toLocaleString()} steps`;}
 }
 
-function showPage(name,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');btn.classList.add('active');if(name==='weight')renderWeight();if(name==='weekly')renderWeekly();if(name==='settings')renderSettings();window.scrollTo(0,0);}
+function showPage(name,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');btn.classList.add('active');if(name==='weight')renderWeight();if(name==='weekly')renderWeekly();if(name==='settings')renderSettings(); if(name==='guide'){}window.scrollTo(0,0);}
 function toggleGuide(){const b=document.getElementById('cgb'),a=document.getElementById('cga');b.classList.toggle('open');a.style.transform=b.classList.contains('open')?'rotate(180deg)':'';}
 function showSt(msg,type){const el=document.getElementById('stmsg');el.textContent=msg;el.className='stmsg show '+type;setTimeout(()=>el.className='stmsg',2500);}
 function showSt2(msg,type){const el=document.getElementById('stmsg2');el.textContent=msg;el.className='stmsg show '+type;setTimeout(()=>el.className='stmsg',2500);}
@@ -747,7 +1297,7 @@ document.addEventListener('DOMContentLoaded',()=>{document.getElementById('notes
 
 // STORAGE
 function save(){try{localStorage.setItem('ht-v3',JSON.stringify({dayData,weightLog}));syncToSheets();}catch(e){}}
-function loadData(){try{const r=localStorage.getItem('ht-v3');if(r){const p=JSON.parse(r);dayData=p.dayData||{};weightLog=p.weightLog||[];}else{dayData={};weightLog=[];}}catch(e){dayData={};weightLog=[];}getDay(curDate);renderToday();}
+function loadData(){loadProfile();try{const r=localStorage.getItem('ht-v3');if(r){const p=JSON.parse(r);dayData=p.dayData||{};weightLog=p.weightLog||[];}else{dayData={};weightLog=[];}}catch(e){dayData={};weightLog=[];}getDay(curDate);renderToday();}
 
 // PWA
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(e=>console.log('SW:',e));});}
@@ -756,8 +1306,74 @@ window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();dp=e;setT
 function installApp(){document.getElementById('ib').classList.remove('show');if(dp){dp.prompt();dp.userChoice.then(c=>{if(c.outcome==='accepted')showSt('App installed! ✅','success');dp=null;});}}
 function dismissInstall(){document.getElementById('ib').classList.remove('show');localStorage.setItem('ib-dismissed','1');}
 
+
+// PROFILE SETTINGS
+function saveProfileSettings(){
+  const h=parseInt(document.getElementById('p-height').value);
+  const sk=parseFloat(document.getElementById('p-startkg').value);
+  const tk=parseFloat(document.getElementById('p-targetkg').value);
+  const ct=parseInt(document.getElementById('p-caltarget').value);
+  if(!h||h<100||h>250){showSt3('Enter a valid height (100–250 cm)','error');return;}
+  if(!tk||tk<30){showSt3('Enter a valid target weight','error');return;}
+  if(!ct||ct<1000){showSt3('Enter a valid calorie target (min 1000)','error');return;}
+  profile.height=h; profile.startKg=sk||profile.startKg; profile.targetKg=tk; profile.calTarget=ct;
+  saveProfile(); renderToday(); renderWeight(); renderSettings();
+  showSt3('✅ Profile updated! All calculations now use your new values.','success');
+}
+
+// EDIT WEIGHT ENTRY
+function openEditW(date,kg){
+  document.getElementById('edit-w-date').value=date;
+  document.getElementById('edit-w-date-lbl').textContent=fmtDate(date);
+  document.getElementById('edit-w-val').value=kg;
+  document.getElementById('edit-w-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('edit-w-val').focus(),150);
+}
+function closeEditW(){document.getElementById('edit-w-modal').classList.remove('open');}
+function saveEditW(){
+  const date=document.getElementById('edit-w-date').value;
+  const kg=parseFloat(document.getElementById('edit-w-val').value);
+  if(!kg||kg<30||kg>250){showSt2('Please enter a valid weight','error');return;}
+  weightLog=weightLog.filter(w=>w.d!==date);
+  weightLog.push({d:date,kg});
+  weightLog.sort((a,b)=>a.d.localeCompare(b.d));
+  save(); closeEditW(); renderWeight();
+  showSt2('✅ Weight entry updated!','success');
+}
+
+
+// GUIDE PAGE
+function switchTab(name, btn) {
+  document.querySelectorAll('.gtab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  ['vitamins','probiotics','tips'].forEach(t => {
+    const el = document.getElementById('gtab-' + t);
+    if (el) el.style.display = (t === name) ? 'block' : 'none';
+  });
+}
+function toggleG(headEl) {
+  const card = headEl.closest('.gcard');
+  const body = card.querySelector('.gcbody');
+  const arr = card.querySelector('.gcarr');
+  const isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  arr.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
 // ═══ SETTINGS PAGE ═══
 function renderSettings(){
+  document.getElementById('p-height').value=profile.height;
+  document.getElementById('p-startkg').value=profile.startKg;
+  document.getElementById('p-targetkg').value=profile.targetKg;
+  document.getElementById('p-caltarget').value=profile.calTarget;
+  // About stats
+  const abStreak=calcStreak();
+  const abDays=Object.keys(dayData).filter(d=>getTotals(d).k>0).length;
+  const latestW=weightLog.length>0?weightLog[weightLog.length-1].kg:profile.startKg;
+  const lost=Math.max(0,(profile.startKg-latestW)).toFixed(1);
+  document.getElementById('ab-streak').textContent=abStreak;
+  document.getElementById('ab-days').textContent=abDays;
+  document.getElementById('ab-lost').textContent=lost+' kg';
   // Data summary
   const days=Object.keys(dayData).filter(d=>getTotals(d).k>0).length;
   const wEntries=weightLog.length;
