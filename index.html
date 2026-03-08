@@ -1189,11 +1189,11 @@ function saveProfile(){localStorage.setItem("ht-profile",JSON.stringify(profile)
 function TARGET(){return profile.calTarget;}
 function H_CM(){return profile.height;}
 const MEALS=[
-  {id:'breakfast',name:'Breakfast',icon:'🌅',time:'Post-gym · 07:00–08:00'},
-  {id:'midmorning',name:'Mid-Morning',icon:'🍊',time:'Fruits / snack · 10:30–11:30'},
-  {id:'lunch',name:'Lunch',icon:'🍚',time:'Rice + curry · 13:00–14:00'},
-  {id:'afternoon',name:'Afternoon',icon:'☕',time:'Light snack · 16:00–17:00'},
-  {id:'dinner',name:'Dinner',icon:'🌙',time:'Rice + curry · 19:30–20:30'},
+  {id:'breakfast',name:'Breakfast',icon:'🌅',time:'08:00 – 09:30'},
+  {id:'midmorning',name:'Morning Snack',icon:'🍊',time:'10:00 – 11:30'},
+  {id:'lunch',name:'Lunch',icon:'🍚',time:'13:00 – 14:30'},
+  {id:'afternoon',name:'Evening Snack',icon:'☕',time:'16:00 – 17:30'},
+  {id:'dinner',name:'Dinner',icon:'🌙',time:'18:00 – 19:30'},
   {id:'other',name:'Other',icon:'🫙',time:'Tea, extras · anytime'},
 ];
 const QF={
@@ -1696,7 +1696,7 @@ async function onUserLoggedIn() {
     const name = currentUser.user_metadata?.full_name?.split(' ')[0] || '';
     document.getElementById('ps-name').value = name;
   } else {
-    // Existing user — load their profile and go to app
+    // Existing user — load their profile then show tour
     profile.name = data.name;
     profile.height = data.height;
     profile.startKg = data.start_kg;
@@ -1705,7 +1705,7 @@ async function onUserLoggedIn() {
     profile.age = data.age;
     profile.gender = data.gender;
     await loadCloudData();
-    showApp();
+    startTour();
   }
 }
 
