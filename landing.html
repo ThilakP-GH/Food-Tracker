@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Tracker — Personal Nutrition & Weight Tracking App</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Mulish:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Mulish',sans-serif;background:#faf9f7;color:#1c1917;}
+.hero{background:#1c1917;padding:48px 24px 56px;text-align:center;}
+.logo{width:90px;height:90px;border-radius:20px;object-fit:cover;margin-bottom:20px;}
+.hero h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fafaf9;margin-bottom:10px;}
+.hero p{font-size:0.95rem;color:#a8a29e;line-height:1.7;max-width:380px;margin:0 auto 28px;}
+.cta{display:inline-flex;align-items:center;gap:10px;background:#2d6a4f;color:#fff;border-radius:12px;padding:14px 28px;text-decoration:none;font-weight:700;font-size:0.95rem;font-family:'Syne',sans-serif;}
+.features{padding:48px 24px;max-width:600px;margin:0 auto;}
+.features h2{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:24px;text-align:center;color:#1c1917;}
+.feat{display:flex;gap:16px;margin-bottom:20px;background:#fff;border-radius:12px;padding:16px;border:1px solid #e8e4de;}
+.feat-icon{font-size:2rem;flex-shrink:0;}
+.feat-title{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:4px;}
+.feat-desc{font-size:0.82rem;color:#78716c;line-height:1.6;}
+.langs{background:#f0fdf4;border-radius:12px;padding:16px;margin-bottom:20px;border:1px solid #86efac;}
+.langs-title{font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:#2d6a4f;margin-bottom:10px;font-weight:600;}
+.lang-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.lang-tag{background:#fff;border:1px solid #86efac;border-radius:100px;padding:4px 12px;font-size:0.78rem;color:#2d6a4f;font-weight:600;}
+.footer{background:#1c1917;padding:24px;text-align:center;}
+.footer a{color:#86efac;text-decoration:none;font-size:0.82rem;margin:0 8px;}
+.footer p{color:#57534e;font-size:0.75rem;margin-top:10px;}
+.founder{display:flex;align-items:center;gap:14px;background:#1c1917;border-radius:12px;padding:16px;margin-bottom:20px;}
+.founder img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #86efac;flex-shrink:0;}
+.founder-name{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;color:#fafaf9;}
+.founder-role{font-size:0.75rem;color:#86efac;margin-top:2px;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="./icon-192.png" class="logo" alt="Health Tracker">
+  <h1>Health Tracker</h1>
+  <p>Your personal nutrition and weight tracking companion. Log meals, track weight, monitor water intake — all with personalised calorie targets calculated just for you.</p>
+  <a href="./index.html" class="cta">🚀 Open App</a>
+</div>
+
+<div class="features">
+  <h2>Everything you need to reach your health goals</h2>
+
+  <div class="feat">
+    <div class="feat-icon">🥗</div>
+    <div>
+      <div class="feat-title">Daily Food Logging</div>
+      <div class="feat-desc">Log meals across 6 time slots — Breakfast, Mid-Morning, Lunch, Afternoon, Dinner, and Other. See your calorie ring update in real time.</div>
+    </div>
+  </div>
+
+  <div class="feat">
+    <div class="feat-icon">🔍</div>
+    <div>
+      <div class="feat-title">AI Food Search</div>
+      <div class="feat-desc">Search any Indian food item and get instant calorie information. Works for all regional dishes.</div>
+    </div>
+  </div>
+
+  <div class="langs">
+    <div class="langs-title">🌐 Supported Languages</div>
+    <div class="lang-tags">
+      <span class="lang-tag">English</span>
+      <span class="lang-tag">Hindi</span>
+      <span class="lang-tag">Kannada</span>
+      <span class="lang-tag">Tamil</span>
+      <span class="lang-tag">Telugu</span>
+    </div>
+  </div>
+
+  <div class="feat">
+    <div class="feat-icon">⚖️</div>
+    <div>
+      <div class="feat-title">Weight Tracking</div>
+      <div class="feat-desc">Log your weight daily, see your trend graph, monitor your BMI, and track your progress towards your target weight.</div>
+    </div>
+  </div>
+
+  <div class="feat">
+    <div class="feat-icon">📊</div>
+    <div>
+      <div class="feat-title">Weekly Insights</div>
+      <div class="feat-desc">View 7-day averages, logging streaks, daily calorie charts, and your best performing day of the week.</div>
+    </div>
+  </div>
+
+  <div class="feat">
+    <div class="feat-icon">📚</div>
+    <div>
+      <div class="feat-title">Nutrition Guide</div>
+      <div class="feat-desc">Comprehensive guide to vitamins and their Indian food sources, probiotic foods for gut health, and 12 evidence-based weight loss tips.</div>
+    </div>
+  </div>
+
+  <div class="feat">
+    <div class="feat-icon">☁️</div>
+    <div>
+      <div class="feat-title">Cloud Sync</div>
+      <div class="feat-desc">Sign in with Google and your data syncs securely across all your devices. Your data is private — only you can access it.</div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:32px;margin-bottom:16px;">Meet the Founder</h2>
+  <div class="founder">
+    <img src="./icon-192.png" alt="Thilak Pollampally">
+    <div>
+      <div class="founder-name">Thilak Pollampally</div>
+      <div class="founder-role">Founder · Health Tracker</div>
+      <div style="font-size:0.78rem;color:#a8a29e;margin-top:6px;line-height:1.5;">Built this app to make healthy living simple and accessible for everyone.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <a href="./index.html">Open App</a>
+  <a href="./privacy.html">Privacy Policy</a>
+  <a href="mailto:thilakpollampally@gmail.com">Contact</a>
+  <p>© 2026 Health Tracker · Built by Thilak Pollampally</p>
+</div>
+
+</body>
+</html>
