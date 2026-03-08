@@ -1604,7 +1604,10 @@ let currentUser = null;
 async function signInWithGoogle() {
   const { error } = await _supabase.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.href }
+    options: {
+      redirectTo: 'https://thilakp-gh.github.io/Food-Tracker/',
+      queryParams: { access_type: 'offline', prompt: 'consent' }
+    }
   });
   if (error) alert('Sign in failed: ' + error.message);
 }
