@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="HealthLog">
 <link rel="apple-touch-icon" href="./icon-192.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -207,6 +208,36 @@ canvas{width:100%!important;}
 /* SETTINGS */
 .ssl{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
 
+
+/* ── LOGIN PAGE ── */
+#login-screen{position:fixed;inset:0;background:#1c1917;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:32px;}
+#login-screen.hidden{display:none;}
+.login-logo{width:120px;height:120px;border-radius:28px;object-fit:cover;margin-bottom:24px;box-shadow:0 8px 32px rgba(0,0,0,0.4);}
+.login-title{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fafaf9;margin-bottom:6px;text-align:center;}
+.login-sub{font-size:0.85rem;color:#78716c;margin-bottom:40px;text-align:center;line-height:1.6;}
+.google-btn{display:flex;align-items:center;gap:12px;background:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:0.95rem;font-weight:600;color:#1c1917;cursor:pointer;width:100%;max-width:300px;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.3);}
+.google-btn:active{transform:scale(0.98);}
+.google-btn img{width:22px;height:22px;}
+.login-note{font-size:0.72rem;color:#57534e;margin-top:20px;text-align:center;line-height:1.6;}
+/* ── PROFILE SETUP ── */
+#profile-screen{position:fixed;inset:0;background:#1c1917;display:flex;flex-direction:column;z-index:9998;padding:24px;overflow-y:auto;}
+#profile-screen.hidden{display:none;}
+.ps-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fafaf9;margin-bottom:6px;}
+.ps-sub{font-size:0.82rem;color:#78716c;margin-bottom:28px;line-height:1.6;}
+.ps-field{margin-bottom:18px;}
+.ps-label{font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:#78716c;margin-bottom:7px;display:block;}
+.ps-input{width:100%;background:#2c2825;border:1px solid #3c3836;border-radius:10px;padding:13px 14px;font-size:0.95rem;color:#fafaf9;font-family:'Mulish',sans-serif;box-sizing:border-box;}
+.ps-input:focus{outline:none;border-color:#86efac;}
+.ps-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ps-calc{background:#1a2e1a;border:1px solid #2d6a4f;border-radius:10px;padding:14px;margin-bottom:24px;}
+.ps-calc-title{font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:#86efac;margin-bottom:10px;}
+.ps-calc-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.ps-calc-label{font-size:0.8rem;color:#a8a29e;}
+.ps-calc-val{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;color:#fafaf9;}
+.ps-save-btn{width:100%;background:#2d6a4f;border:none;border-radius:12px;padding:15px;font-size:1rem;font-weight:700;color:#fff;font-family:'Syne',sans-serif;cursor:pointer;margin-bottom:16px;}
+.ps-save-btn:active{transform:scale(0.98);}
+/* ── USER AVATAR in header ── */
+.user-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #86efac;cursor:pointer;}
 /* GUIDE PAGE */
 .gtab{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:7px 14px;font-size:0.76rem;cursor:pointer;font-family:'Mulish',sans-serif;color:var(--muted);white-space:nowrap;font-weight:500;}
 .gtab.active{background:var(--dark);color:#86efac;border-color:var(--dark);}
@@ -1296,7 +1327,7 @@ function showSt2(msg,type){const el=document.getElementById('stmsg2');el.textCon
 document.addEventListener('DOMContentLoaded',()=>{document.getElementById('notes').addEventListener('input',e=>{getDay(curDate).notes=e.target.value;save();});});
 
 // STORAGE
-function save(){try{localStorage.setItem('ht-v3',JSON.stringify({dayData,weightLog}));syncToSheets();}catch(e){}}
+function save(){try{localStorage.setItem('ht-v3',JSON.stringify({dayData,weightLog}));syncToSheets();saveToCloud();}catch(e){}}
 function loadData(){loadProfile();try{const r=localStorage.getItem('ht-v3');if(r){const p=JSON.parse(r);dayData=p.dayData||{};weightLog=p.weightLog||[];}else{dayData={};weightLog=[];}}catch(e){dayData={};weightLog=[];}getDay(curDate);renderToday();}
 
 // PWA
@@ -1485,6 +1516,251 @@ function resetAll(){
 function showSt3(msg,type){const el=document.getElementById('stmsg3');el.textContent=msg;el.className='stmsg show '+type;setTimeout(()=>el.className='stmsg',3500);}
 
 loadData();
+</script>
+
+<script>
+// ═══════════════════════════════════════════
+// SUPABASE CONFIG — PASTE YOUR VALUES BELOW
+// ═══════════════════════════════════════════
+const SUPABASE_URL = 'https://ybxvqglkxmgqttrsqepq.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_R1hhoqOSo5SHIskSqTts3g_3qL7w65y';
+
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let currentUser = null;
+
+// ── GOOGLE SIGN IN ──
+async function signInWithGoogle() {
+  const { error } = await _supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href }
+  });
+  if (error) alert('Sign in failed: ' + error.message);
+}
+
+// ── SIGN OUT ──
+async function signOut() {
+  await _supabase.auth.signOut();
+  currentUser = null;
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('app').style.display = 'none';
+}
+
+// ── CHECK AUTH STATE ON LOAD ──
+async function initAuth() {
+  const { data: { session } } = await _supabase.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    await onUserLoggedIn();
+  } else {
+    document.getElementById('login-screen').classList.remove('hidden');
+    document.getElementById('app').style.display = 'none';
+  }
+
+  // Listen for auth changes (e.g. after Google redirect)
+  _supabase.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      currentUser = session.user;
+      await onUserLoggedIn();
+    } else if (event === 'SIGNED_OUT') {
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('app').style.display = 'none';
+    }
+  });
+}
+
+// ── AFTER LOGIN ──
+async function onUserLoggedIn() {
+  document.getElementById('login-screen').classList.add('hidden');
+
+  // Check if profile exists in Supabase
+  const { data, error } = await _supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', currentUser.id)
+    .single();
+
+  if (!data) {
+    // New user — show profile setup
+    document.getElementById('profile-screen').classList.remove('hidden');
+    document.getElementById('app').style.display = 'none';
+    // Pre-fill name from Google
+    const name = currentUser.user_metadata?.full_name?.split(' ')[0] || '';
+    document.getElementById('ps-name').value = name;
+  } else {
+    // Existing user — load their profile and go to app
+    profile.name = data.name;
+    profile.height = data.height;
+    profile.startKg = data.start_kg;
+    profile.targetKg = data.target_kg;
+    profile.calTarget = data.cal_target;
+    profile.age = data.age;
+    profile.gender = data.gender;
+    await loadCloudData();
+    showApp();
+  }
+}
+
+// ── SAVE PROFILE ON FIRST SETUP ──
+async function saveProfileAndStart() {
+  const name = document.getElementById('ps-name').value.trim();
+  const age = parseInt(document.getElementById('ps-age').value);
+  const gender = document.getElementById('ps-gender').value;
+  const height = parseFloat(document.getElementById('ps-height').value);
+  const weight = parseFloat(document.getElementById('ps-weight').value);
+  const target = parseFloat(document.getElementById('ps-target').value);
+  const activity = parseFloat(document.getElementById('ps-activity').value);
+
+  if (!name || !age || !height || !weight || !target) {
+    alert('Please fill in all fields!');
+    return;
+  }
+
+  // Calculate calorie target
+  let bmr;
+  if (gender === 'male') {
+    bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+  } else {
+    bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+  }
+  const tdee = Math.round(bmr * activity);
+  const calTarget = tdee - 500; // 500 kcal deficit
+
+  // Save to Supabase
+  const { error } = await _supabase.from('profiles').upsert({
+    id: currentUser.id,
+    email: currentUser.email,
+    name, age, gender, height,
+    start_kg: weight,
+    target_kg: target,
+    cal_target: calTarget,
+    activity_level: activity,
+    created_at: new Date().toISOString()
+  });
+
+  if (error) { alert('Error saving profile: ' + error.message); return; }
+
+  // Update local profile
+  profile.name = name;
+  profile.age = age;
+  profile.gender = gender;
+  profile.height = height;
+  profile.startKg = weight;
+  profile.targetKg = target;
+  profile.calTarget = calTarget;
+
+  document.getElementById('profile-screen').classList.add('hidden');
+  showApp();
+}
+
+// ── SHOW MAIN APP ──
+function showApp() {
+  document.getElementById('app').style.display = 'block';
+  loadData();
+  // Show user avatar in header
+  const avatar = currentUser?.user_metadata?.avatar_url;
+  if (avatar) {
+    document.querySelectorAll('.user-avatar-img').forEach(img => img.src = avatar);
+  }
+  // Show user name
+  document.querySelectorAll('.user-name-display').forEach(el => {
+    el.textContent = profile.name || currentUser?.user_metadata?.full_name?.split(' ')[0] || '';
+  });
+}
+
+// ── LOAD DATA FROM SUPABASE ──
+async function loadCloudData() {
+  const today = new Date().toISOString().split('T')[0];
+  const { data } = await _supabase
+    .from('health_logs')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('log_date', { ascending: false })
+    .limit(90);
+
+  if (data && data.length > 0) {
+    data.forEach(row => {
+      dayData[row.log_date] = {
+        meals: row.meals || {},
+        water: row.water || 0,
+        steps: row.steps || 0,
+        burned: row.burned || 0,
+        notes: row.notes || ''
+      };
+    });
+
+    // Load weight log
+    const { data: wdata } = await _supabase
+      .from('weight_logs')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .order('log_date', { ascending: false });
+
+    if (wdata) {
+      weightLog = wdata.map(w => ({ date: w.log_date, kg: w.weight_kg }));
+    }
+  }
+}
+
+// ── SAVE DATA TO SUPABASE ──
+async function saveToCloud() {
+  if (!currentUser) return;
+  const today = curDate;
+  const todayData = dayData[today] || {};
+
+  await _supabase.from('health_logs').upsert({
+    user_id: currentUser.id,
+    log_date: today,
+    meals: todayData.meals || {},
+    water: todayData.water || 0,
+    steps: todayData.steps || 0,
+    burned: todayData.burned || 0,
+    notes: todayData.notes || '',
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'user_id,log_date' });
+}
+
+// ── SAVE WEIGHT TO SUPABASE ──
+async function saveWeightToCloud(date, kg) {
+  if (!currentUser) return;
+  await _supabase.from('weight_logs').upsert({
+    user_id: currentUser.id,
+    log_date: date,
+    weight_kg: kg,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'user_id,log_date' });
+}
+
+// ── LIVE CALORIE PREVIEW ON PROFILE SETUP ──
+function updateCalcPreview() {
+  const age = parseInt(document.getElementById('ps-age').value);
+  const gender = document.getElementById('ps-gender').value;
+  const height = parseFloat(document.getElementById('ps-height').value);
+  const weight = parseFloat(document.getElementById('ps-weight').value);
+  const target = parseFloat(document.getElementById('ps-target').value);
+  const activity = parseFloat(document.getElementById('ps-activity').value);
+
+  if (!age || !height || !weight) { document.getElementById('ps-calc').style.display='none'; return; }
+
+  let bmr;
+  if (gender === 'male') bmr = 10*weight + 6.25*height - 5*age + 5;
+  else bmr = 10*weight + 6.25*height - 5*age - 161;
+
+  const tdee = Math.round(bmr * activity);
+  const calTarget = tdee - 500;
+  const bmi = (weight / ((height/100)**2)).toFixed(1);
+  const kgToLose = weight - (target || weight);
+  const months = kgToLose > 0 ? (kgToLose / 2).toFixed(1) : '—';
+
+  document.getElementById('pc-bmr').textContent = Math.round(bmr) + ' kcal';
+  document.getElementById('pc-tdee').textContent = tdee + ' kcal';
+  document.getElementById('pc-target').textContent = calTarget + ' kcal/day';
+  document.getElementById('pc-bmi').textContent = bmi;
+  document.getElementById('pc-time').textContent = kgToLose > 0 ? months + ' months' : '—';
+  document.getElementById('ps-calc').style.display = 'block';
+}
+
+// Start auth check when page loads
+window.addEventListener('load', initAuth);
 </script>
 </body>
 </html>
